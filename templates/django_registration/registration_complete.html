@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Registration Complete{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card auth-card text-center">
+                    <div class="card-body p-4">
+                        <!-- Success LED, replacing Bootstrap's green check icon -->
+                        <div class="mb-3">
+                            <span class="led led-success" style="width:20px; height:20px; display:inline-block;"></span>
+                        </div>
+                        <h2 class="card-title mb-3">Account Flashed</h2>
+
+                        <p class="mb-4" style="color:#9DA7B3;">
+                            Firmware written successfully. Your account is provisioned and ready — log in to boot up.
+                        </p>
+
+                        <div class="d-grid gap-2">
+                            <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Home</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

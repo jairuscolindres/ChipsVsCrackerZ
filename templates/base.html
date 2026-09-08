@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ChipsVsCrackerZ{% endblock %}</title>
+
+    <!-- Bootstrap 5 CSS (layout/grid/utilities only — visual tokens overridden below) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Type system: Inter/JetBrains Mono for UI, Fira Code for terminals & flags -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+
+    {% block extra_css %}{% endblock %}
+
+    <style>
+        /* ============================================================
+           CHIPSVSCRACKERZ DESIGN SYSTEM — CYBER-DINER / INDUSTRIAL CIRCUIT
+           ============================================================ */
+        :root {
+            /* Board tokens */
+            --bg-primary: #0D1117;
+            --bg-secondary: #161B22;
+            --bg-tertiary: #21262D;
+            --border-subtle: #30363D;
+            --border-active: #FFB800;
+
+            /* Brand & accent tokens */
+            --brand-gold: #FFB800;
+            --accent-copper: #E56B10;
+            --cyan-glow: #00E5FF;
+
+            /* Functional LED tokens */
+            --status-success: #23D18B;
+            --status-error: #FF453A;
+            --status-warning: #FF9F0A;
+            --status-info: #0A84FF;
+
+            /* Type */
+            --font-ui: 'Inter', 'JetBrains Mono', sans-serif;
+            --font-mono: 'Fira Code', 'Source Code Pro', monospace;
+
+            /* Grid */
+            --unit: 8px;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            /* Dot-matrix schematic grid over the PCB chassis background */
+            background-image: radial-gradient(var(--border-subtle) 1px, transparent 1px);
+            background-size: 16px 16px;
+            color: #E6EDF3;
+            font-family: var(--font-ui);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-ui);
+            font-weight: 600;
+            color: #F0F6FC;
+        }
+
+        /* Hero / Title Display */
+        h1 { font-size: 32px; font-weight: 700; line-height: 1.2; }
+        /* H1 spec (Lab titles, primary modal headers) reused as h2 element */
+        h2 { font-size: 24px; font-weight: 600; line-height: 1.3; }
+        /* H2 spec (Panel titles, section headers) reused as h3 element */
+        h3 { font-size: 20px; font-weight: 600; line-height: 1.4; }
+
+        code, pre, .font-mono, .terminal {
+            font-family: var(--font-mono);
+        }
+
+        a {
+            color: var(--accent-copper);
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--brand-gold);
+        }
+
+        ::selection {
+            background: rgba(0, 229, 255, 0.35);
+            color: #fff;
+        }
+
+        /* ------------------------------------------------------------
+           HEADER / NAVBAR — workbench mounting rail
+           ------------------------------------------------------------ */
+        header .navbar {
+            background-color: var(--bg-secondary) !important;
+            border-bottom: 1px solid var(--border-subtle);
+            padding-top: var(--unit);
+            padding-bottom: var(--unit);
+        }
+
+        .navbar-brand {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--brand-gold) !important;
+            letter-spacing: 0.02em;
+        }
+        .navbar-brand::before {
+            content: "\25CF ";
+            color: var(--status-success);
+            font-size: 0.7em;
+            vertical-align: middle;
+        }
+
+        .navbar-nav .nav-link {
+            color: #C9D1D9 !important;
+            font-weight: 500;
+            padding: var(--unit) 16px !important;
+            border-radius: 4px;
+            transition: color 0.15s ease, background-color 0.15s ease;
+        }
+        .navbar-nav .nav-link:hover {
+            color: var(--brand-gold) !important;
+            background-color: rgba(255, 184, 0, 0.08);
+        }
+        .navbar-nav .nav-link.active {
+            color: var(--bg-primary) !important;
+            background-color: var(--brand-gold);
+            font-weight: 600;
+        }
+
+        .navbar-toggler {
+            border-color: var(--border-subtle);
+        }
+
+        /* ------------------------------------------------------------
+           BUTTONS
+           ------------------------------------------------------------ */
+
+        /* Primary CTA — Gold Crisp */
+        .btn-primary {
+            background-color: var(--brand-gold);
+            border-color: var(--brand-gold);
+            color: var(--bg-primary);
+            font-weight: 700;
+            transition: transform 0.1s ease, box-shadow 0.15s ease;
+        }
+        .btn-primary:hover,
+        .btn-primary:focus {
+            background-color: var(--brand-gold);
+            border-color: var(--brand-gold);
+            color: var(--bg-primary);
+            box-shadow: 0 0 0 2px rgba(255, 184, 0, 0.3);
+        }
+        .btn-primary:active {
+            transform: translateY(-1px);
+        }
+
+        /* Secondary — Trace Outline */
+        .btn-outline-light,
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-subtle);
+            color: #E6EDF3;
+        }
+        .btn-outline-light:hover,
+        .btn-secondary:hover {
+            border-color: var(--brand-gold);
+            color: var(--accent-copper);
+            background-color: transparent;
+        }
+
+        /* Danger — Hard Reset */
+        .btn-danger {
+            background-color: transparent;
+            border: 1px solid var(--status-error);
+            color: var(--status-error);
+        }
+        .btn-danger:hover {
+            background-color: var(--status-error);
+            color: var(--bg-primary);
+        }
+
+        /* ------------------------------------------------------------
+           DROPDOWN
+           ------------------------------------------------------------ */
+        .dropdown-menu {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+        }
+        .dropdown-item {
+            color: #C9D1D9;
+        }
+        .dropdown-item:hover,
+        .dropdown-item:focus {
+            background-color: var(--bg-tertiary);
+            color: var(--brand-gold);
+        }
+
+        /* ------------------------------------------------------------
+           LAYOUT — breadboard mounting surface
+           ------------------------------------------------------------ */
+        #sidebar {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        #content {
+            padding: 0 var(--unit);
+        }
+
+        /* ------------------------------------------------------------
+           COMPONENT CARDS — IC package framing
+           ------------------------------------------------------------ */
+        .card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: #E6EDF3;
+        }
+        .card-header {
+            background-color: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-subtle);
+            font-family: var(--font-mono);
+            font-size: 12px;
+            letter-spacing: 0.04em;
+        }
+        .card.solved {
+            border-color: var(--status-success);
+            box-shadow: 0 0 0 1px var(--status-success);
+        }
+
+        /* ------------------------------------------------------------
+           LED STATUS DOTS
+           ------------------------------------------------------------ */
+        .led {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            box-shadow: 0 0 6px 1px currentColor;
+        }
+        .led-success { background: var(--status-success); color: var(--status-success); }
+        .led-error   { background: var(--status-error);   color: var(--status-error); }
+        .led-warning { background: var(--status-warning); color: var(--status-warning); }
+        .led-info    { background: var(--status-info);    color: var(--status-info); }
+
+        /* ------------------------------------------------------------
+           FORM CONTROLS
+           ------------------------------------------------------------ */
+        .form-control,
+        .form-select {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            color: #E6EDF3;
+        }
+        .form-control:focus,
+        .form-select:focus {
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-active);
+            color: #E6EDF3;
+            box-shadow: 0 0 0 3px rgba(255, 184, 0, 0.15);
+        }
+        .form-control::placeholder {
+            color: #6E7681;
+        }
+
+        /* ------------------------------------------------------------
+           AUTH SCREENS — minimalist dark surface over a schematic grid
+           ------------------------------------------------------------ */
+        .auth-wrap {
+            min-height: calc(100vh - 220px);
+            display: flex;
+            align-items: center;
+            background-image:
+                radial-gradient(circle at 50% 0%, rgba(0, 229, 255, 0.06), transparent 60%),
+                radial-gradient(var(--border-subtle) 1px, transparent 1px);
+            background-size: auto, 16px 16px;
+        }
+
+        .auth-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+        }
+
+        .auth-card .card-title {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: #F0F6FC;
+            letter-spacing: 0.02em;
+        }
+
+        .auth-form label {
+            display: block;
+            font-family: var(--font-mono);
+            font-size: 12px;
+            color: #8B949E;
+            margin-bottom: 4px;
+        }
+
+        /* Terminal-style prompt prefix for auth inputs, e.g. user@crackerz:~$ */
+        .prompt-group {
+            display: flex;
+            align-items: stretch;
+        }
+        .prompt-group .prompt-prefix {
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            border-radius: 4px 0 0 4px;
+            white-space: nowrap;
+            font-size: 13px;
+            font-family: var(--font-mono);
+            color: var(--status-success);
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-right: none;
+        }
+        .prompt-group input {
+            flex: 1 1 auto;
+            width: 1%; /* allow the flex item to shrink/grow past its intrinsic content width */
+            border-radius: 0 4px 4px 0 !important;
+            border-left: none !important;
+        }
+        .prompt-group input:focus {
+            border-left: 1px solid var(--border-active) !important;
+        }
+
+        .auth-form .form-text {
+            font-family: var(--font-mono);
+            font-size: 12px;
+            line-height: 1.5;
+            color: #9DA7B3;
+            margin-top: 4px;
+        }
+        .auth-form .form-text ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .auth-form .form-text ul li {
+            position: relative;
+            padding-left: 14px;
+        }
+        .auth-form .form-text ul li::before {
+            content: "›";
+            position: absolute;
+            left: 0;
+            color: var(--cyan-glow);
+        }
+
+        .auth-form .errorlist {
+            list-style: none;
+            padding: 0;
+            margin: 4px 0 0;
+            color: var(--status-error);
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+
+        .auth-divider {
+            border-color: var(--border-subtle);
+        }
+
+        /* ------------------------------------------------------------
+           LED-TONED ALERTS — replaces Bootstrap's default alert palette
+           ------------------------------------------------------------ */
+        .alert-led {
+            border-radius: 4px;
+            border: 1px solid;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .alert-led.alert-error {
+            background-color: rgba(255, 69, 58, 0.1);
+            border-color: var(--status-error);
+            color: #FFB4AE;
+        }
+        .alert-led.alert-warning {
+            background-color: rgba(255, 159, 10, 0.1);
+            border-color: var(--status-warning);
+            color: #FFD199;
+        }
+        .alert-led.alert-info {
+            background-color: rgba(10, 132, 255, 0.1);
+            border-color: var(--status-info);
+            color: #9CCBFF;
+        }
+
+        /* ------------------------------------------------------------
+           FOOTER
+           ------------------------------------------------------------ */
+        footer {
+            background-color: var(--bg-secondary);
+            border-top: 1px solid var(--border-subtle);
+            color: #6E7681;
+            font-family: var(--font-mono);
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <!-- Header / Navbar -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+            <div class="container-fluid">
+                <a class="navbar-brand fw-bold" href="/">ChipsVsCrackerZ</a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <!-- Left Nav Links -->
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/labs/">Labs</a>
+                        </li>
+                    </ul>
+
+                    <!-- Right Auth Links (Login / Register / Logout) -->
+                    <ul class="navbar-nav ms-auto">
+                        {% if user.is_authenticated %}
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Options
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <li>
+                                        <form method="post" action="{% url 'logout' %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="dropdown-item">Log Out</button>
+                                        </form>
+                                    </li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn btn-primary ms-2" href="{% url 'django_registration_register' %}">Register</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Body Container -->
+    <div class="container-fluid flex-grow-1">
+        <div class="row">
+            <!-- Sidebar (Optional, collapsible on small screens) -->
+
+            <!-- Main Content Area -->
+            <main id="content">
+                {% block content %}{% endblock %}
+            </main>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-3 text-center">
+        <span>&gt; system.uptime // ChipsVsCrackerZ &copy; {% now "Y" %}</span>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle (required for toggles and dropdowns) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

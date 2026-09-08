@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}Create an Account{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card auth-card">
+                    <div class="card-body p-4">
+                        <h2 class="card-title text-center mb-4">Create an Account</h2>
+
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-led alert-error" role="alert">
+                                <span class="led led-error"></span>
+                                {{ form.non_field_errors.0 }}
+                            </div>
+                        {% endif %}
+
+                        <form method="POST" action="{% url 'django_registration_register' %}" class="auth-form">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="{{ form.username.id_for_label }}">{{ form.username.label|default:"username" }}</label>
+                                <div class="prompt-group">
+                                    <span class="prompt-prefix">user@crackerz:~$</span>
+                                    {{ form.username }}
+                                </div>
+                                {% if form.username.help_text %}
+                                    <div class="form-text">{{ form.username.help_text }}</div>
+                                {% endif %}
+                                {{ form.username.errors }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.email.id_for_label }}">{{ form.email.label|default:"email" }}</label>
+                                <div class="prompt-group">
+                                    <span class="prompt-prefix">mail@crackerz:~$</span>
+                                    {{ form.email }}
+                                </div>
+                                {% if form.email.help_text %}
+                                    <div class="form-text">{{ form.email.help_text }}</div>
+                                {% endif %}
+                                {{ form.email.errors }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.password1.id_for_label }}">{{ form.password1.label|default:"password" }}</label>
+                                <div class="prompt-group">
+                                    <span class="prompt-prefix">passwd:</span>
+                                    {{ form.password1 }}
+                                </div>
+                                {% if form.password1.help_text %}
+                                    <div class="form-text">{{ form.password1.help_text }}</div>
+                                {% endif %}
+                                {{ form.password1.errors }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.password2.id_for_label }}">{{ form.password2.label|default:"confirm password" }}</label>
+                                <div class="prompt-group">
+                                    <span class="prompt-prefix">confirm:</span>
+                                    {{ form.password2 }}
+                                </div>
+                                {% if form.password2.help_text %}
+                                    <div class="form-text">{{ form.password2.help_text }}</div>
+                                {% endif %}
+                                {{ form.password2.errors }}
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">Flash Firmware</button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4 auth-divider">
+
+                        <div class="text-center">
+                            <p class="mb-0" style="color:#6E7681;">
+                                Already have an account?
+                                <a href="{% url 'login' %}" class="text-decoration-none">Login here</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

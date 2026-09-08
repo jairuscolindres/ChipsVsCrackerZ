@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Log In{% endblock %}
+
+{% block content %}
+<div class="auth-wrap">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card auth-card">
+                    <div class="card-body p-4">
+                        <h2 class="card-title text-center mb-4">Log In</h2>
+
+                        {# Error Alert #}
+                        {% if form.errors %}
+                            <div class="alert alert-led alert-error" role="alert">
+                                <span class="led led-error"></span>
+                                Checksum mismatch — username and password didn't match. Try again.
+                            </div>
+                        {% endif %}
+
+                        {# Next Redirect Notice #}
+                        {% if next %}
+                            {% if user.is_authenticated %}
+                                <div class="alert alert-led alert-warning" role="alert">
+                                    <span class="led led-warning"></span>
+                                    Access denied — this account isn't authorized for that page.
+                                </div>
+                            {% else %}
+                                <div class="alert alert-led alert-info" role="alert">
+                                    <span class="led led-info"></span>
+                                    Authentication required to view that page.
+                                </div>
+                            {% endif %}
+                        {% endif %}
+
+                        <form method="post" action="{% url 'login' %}" class="auth-form">
+                            {% csrf_token %}
+
+                            <div class="mb-3">
+                                <label for="{{ form.username.id_for_label }}">{{ form.username.label|default:"username" }}</label>
+                                <div class="prompt-group">
+                                    <span class="prompt-prefix">user@crackerz:~$</span>
+                                    {{ form.username }}
+                                </div>
+                                {% if form.username.help_text %}
+                                    <div class="form-text">{{ form.username.help_text }}</div>
+                                {% endif %}
+                                {{ form.username.errors }}
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="{{ form.password.id_for_label }}">{{ form.password.label|default:"password" }}</label>
+                                <div class="prompt-group">
+                                    <span class="prompt-prefix">passwd:</span>
+                                    {{ form.password }}
+                                </div>
+                                {{ form.password.errors }}
+                            </div>
+
+                            <input type="hidden" name="next" value="{{ next }}">
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" class="btn btn-primary">Inject Credentials</button>
+                            </div>
+                        </form>
+
+                        <hr class="my-4 auth-divider">
+
+                        <div class="text-center">
+                            <p class="mb-1">
+                                <a href="{% url 'password_reset' %}" class="text-decoration-none">Lost password?</a>
+                            </p>
+                            <p class="mb-0" style="color:#6E7681;">
+                                Don't have an account?
+                                <a href="{% url 'django_registration_register' %}" class="text-decoration-none">Register here</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
